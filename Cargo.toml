@@ -11,7 +11,7 @@ walkdir = "2.3.*"
 rustop = "1.1.*"
 arrayvec = "0.7.*"
 flexi_logger = "*"
-sysinfo = "*"
+sysinfo = "0.28.4"
 human_bytes = "0.4.*"
 filesize = "*"
 file-format = "*"
@@ -24,7 +24,8 @@ memmap = "0.7.*"
 chrono = "*"
 
 [target.'cfg(unix)'.dependencies]
-yara = { version="*" }
+yara = { version="*", features=["yara-static"] }
 
 [target.'cfg(windows)'.dependencies]
 yara = { version="*", features=["bundled-4_2_3"] }
+windows-sys = { version = "0.60.2", features = ["Win32_System_JobObjects", "Win32_System_Threading", "Win32_Foundation", "Win32_Security"] }
