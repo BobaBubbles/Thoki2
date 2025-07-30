@@ -68,7 +68,7 @@ jobs:
       uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
-        filename: 'loki.zip'
+        filename: 'thoki.zip'
         directory: './dist'
 
     - name: Upload assets
@@ -78,6 +78,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./dist/loki.zip
-        asset_name: loki2-windows.zip
+        asset_path: ./dist/thoki.zip
+        asset_name: thoki2-windows.zip
         asset_content_type: application/zip
