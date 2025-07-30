@@ -12,14 +12,7 @@ use yara::*;
 use crate::helpers::helpers::{get_hostname, get_os_type, evaluate_env};
 use crate::modules::process_check::scan_processes;
 use crate::modules::filesystem_scan::scan_path;
-
-// Specific TODOs
-// - skipping non-local file systems like network mounts or cloudfs drives
-
-// General TODOs
-// - better error handling
-// - putting all modules in an array and looping over that list instead of a fixed sequence
-// - restructuring project to multiple files
+use crate::modules::cpu_limit::set_cpu_limit;
 
 const VERSION: &str = "2.0.1-alpha";
 
@@ -192,9 +185,8 @@ fn initialize_filename_iocs() -> Vec<FilenameIOC> {
     return filename_iocs;
 }
 
+// Defaults filename IOC value to Regex (unfinished IOC scanner feature)
 fn get_filename_ioc_type(filename_ioc_value: &str) -> FilenameIOCType {
-    // TODO ... detect filename IOC type
-    // currently every filename gets detected and initialized as regex (which consumes a lot of memory)
     return FilenameIOCType::Regex;
 } 
 
@@ -295,20 +287,25 @@ fn log_cmdline_format(
     )
 }
 
-// Welcome message
 fn welcome_message() {
     println!("------------------------------------------------------------------------");
-    println!("     __   ____  __ ______  ____                                        ");
-    println!("    / /  / __ \\/ //_/  _/ / __/______ ____  ___  ___ ____              ");
-    println!("   / /__/ /_/ / ,< _/ /  _\\ \\/ __/ _ `/ _ \\/ _ \\/ -_) __/           ");
-    println!("  /____/\\____/_/|_/___/ /___/\\__/\\_,_/_//_/_//_/\\__/_/              ");
-    println!("  Simple IOC and YARA Scanner                                           ");
+    println!("  ________          __   _                                         ");
+    println!(" /_  __/ /_  ____  / /__(_)         ");
+    println!("  / / / __ \\/ __ \\/ //_/ /");
+    println!(" / / / / / / /_/ / ,< / /             ");
+    println!("/_/ /_/ /_/\\____/_/|_/_/");
+    println!("YARA and IOC Scanner                                           ");
     println!(" ");
+    println!("by Florian Roth, GNU GENERAL PUBLIC LICENSE (Version 3)                                           ");
+    println!("With modifications & improvements by:");
+    println!("Melvin Teo, Micah Chia, Tan De Jun, Javier Tan, Lim Jek Qi from Singapore Institute of Technology");
     println!("  Version {} (Rust)                                            ", VERSION);
-    println!("  Florian Roth 2022                                                     ");
+    println!(" ");
+    println!("DISCLAIMER - USE AT YOUR OWN RISK");
     println!(" ");
     println!("------------------------------------------------------------------------");                      
 }
+
 
 fn main() {
 
@@ -317,7 +314,7 @@ fn main() {
 
     // Parsing command line flags
     let (args, _rest) = opts! {
-        synopsis "LOKI YARA and IOC Scanner";
+        synopsis "THOKI YARA and IOC Scanner";
         opt max_file_size:usize=10_000_000, desc:"Maximum file size to scan";
         opt show_access_errors:bool, desc:"Show all file and process access errors";
         opt scan_all_files:bool, desc:"Scan all files regardless of their file type / extension";
@@ -327,7 +324,9 @@ fn main() {
         opt noprocs:bool, desc:"Don't scan processes";
         opt nofs:bool, desc:"Don't scan the file system";
         opt folder:Option<String>, desc:"Folder to scan"; // an optional (positional) parameter
+        opt cpu_limit:Option<u32>, desc:"Limit CPU usage percentage (e.g. 20 for 20%)";
     }.parse_or_exit();
+
     // Create a config
     let scan_config = ScanConfig {
         max_file_size: args.max_file_size,
@@ -339,7 +338,7 @@ fn main() {
     let mut log_level: String = "info".to_string(); let mut std_out = Duplicate::Info; // default
     if args.debug { log_level = "debug".to_string(); std_out = Duplicate::Debug; }  // set to debug level
     if args.trace { log_level = "trace".to_string(); std_out = Duplicate::Trace; }  // set to trace level
-    let log_file_name = format!("loki_{}", get_hostname());
+    let log_file_name = format!("thoki_{}", get_hostname());
     Logger::try_with_str(log_level).unwrap()
         .log_to_file(
             FileSpec::default()
@@ -352,7 +351,16 @@ fn main() {
         .append()
         .start()
         .unwrap();
-    log::info!("LOKI scan started VERSION: {}", VERSION);
+
+    // Set CPU limit if specified
+    if let Some(cpu_limit) = args.cpu_limit {
+        if !set_cpu_limit(cpu_limit) {
+            log::error!("Failed to set CPU limit. Exiting.");
+            std::process::exit(1);
+        }
+    }
+
+    log::info!("THOKI scan started VERSION: {}", VERSION);
 
     // Print platform & environment information
     evaluate_env();
@@ -398,5 +406,5 @@ fn main() {
     }
 
     // Finished scan
-    log::info!("LOKI scan finished");
+    log::info!("THOKI scan finished");
 }
