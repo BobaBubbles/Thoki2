@@ -1,12 +1,10 @@
 # Thoki (Linux Variant) - Simple IOC and YARA Scanner
 
-## Status
-
-Work in Progress. This version is not ready for use. There's still some work to do for a first release. 
 
 ### What's already implemented
 
 - System reconnaissance (system and hardware information for the log)
+- CPU Limiting
 - Logging and formatting of the different log outputs
 - File system walk
 - File time evaluation (MAC timestamps)
