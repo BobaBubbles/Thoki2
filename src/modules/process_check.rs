@@ -12,14 +12,14 @@ pub fn scan_processes(compiled_rules: &Rules, scan_config: &ScanConfig) ->() {
     sys.refresh_all();
     // Loop over processes
     for (pid_res, process_res) in sys.processes() {
-        // Get LOKI's own process
+        // Get THOKI's own process
         let own_pid = process::id();
         let pid = pid_res.as_u32();
         let pid_disk_usage = process_res.disk_usage();
         let proc_name = process_res.name();
         let proc_cmd = process_res.cmd();
         // Skip some processes
-        if pid == own_pid { continue; }  // skip LOKI's own process
+        if pid == own_pid { continue; }  // skip THOKI's own process
         // Debug output : show every file that gets scanned
         log::debug!("Trying to scan process PID: {} PROC_NAME: {}", pid, proc_name);
         // ------------------------------------------------------------
