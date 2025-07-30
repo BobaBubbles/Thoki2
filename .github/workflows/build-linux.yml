@@ -1,4 +1,4 @@
-name: LOKI2 Build Linux
+name: THOKI2 Build Linux
 
 on:
   push:
