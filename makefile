@@ -4,8 +4,8 @@
 
 OSFLAG 				:=
 ifeq ($(OS),Windows_NT)
-	# LOKI2 can't be built on Windows!
-	# For information on how to build LOKI2 for Windows see the workflow file in .github/workflows/build-linux-to-win.yml
+	# THOKI can't be built on Windows!
+	# For information on how to build THOKI for Windows see the workflow file in .github/workflows/build-linux-to-win.yml
 	exit 1
 else
 	UNAME_S := $(shell uname -s)
@@ -20,7 +20,7 @@ endif
 build:
 	@echo [!] The build has a bunch of dependencies
 	@echo [i] For information on how to fulfill these prerequisites see the workflow file in .github/workflows/
-	@echo [+] Building LOKI release version ...
+	@echo [+] Building THOKI release version ...
 	cargo build --release $(OSFLAG)
 	@echo [+] Build successful!
 
@@ -28,23 +28,23 @@ dist:
 	@echo [+] Cleaning up temporary and target directories ...
 	rm -rf ./dist
 	rm -rf ./tmp
-	mkdir -p ./dist/loki/signatures
+	mkdir -p ./dist/thoki/signatures
 	mkdir ./tmp
 	# macOS
-	-cp ./target/release/loki dist/loki/
+	-cp ./target/release/thoki dist/thoki/
 	# Linux 
-	-cp ./target/x86_64-unknown-linux-musl/release/loki ./dist/loki/
+	-cp ./target/x86_64-unknown-linux-musl/release/thoki ./dist/thoki/
 	# Windows
-	-cp ./target/x86_64-pc-windows-gnu/release/loki.exe ./dist/loki/
+	-cp ./target/x86_64-pc-windows-gnu/release/thoki.exe ./dist/thoki/
 	@echo [+] Downloading signature-base from Github.com ...
 	wget https://github.com/Neo23x0/signature-base/archive/master.tar.gz -O ./tmp/signature-base.tar.gz
 	tar -xvzf ./tmp/signature-base.tar.gz -C ./tmp
 	@echo [+] Copying signatures and IOCs to the ./dist folder ...
-	cp -r ./tmp/signature-base-master/yara ./dist/loki/signatures/yara
-	cp -r ./tmp/signature-base-master/iocs ./dist/loki/signatures/iocs
-	cp LICENSE ./dist/loki/
+	cp -r ./tmp/signature-base-master/yara ./dist/thoki/signatures/yara
+	cp -r ./tmp/signature-base-master/iocs ./dist/thoki/signatures/iocs
+	cp LICENSE ./dist/thoki/
 	rm -rf ./tmp
-	@echo [!] A distributable version of LOKI has been created in the ./dist folder
+	@echo [!] A distributable version of THOKI has been created in the ./dist folder
 
 clean: 
 	@echo [+] Cleaning up ...
