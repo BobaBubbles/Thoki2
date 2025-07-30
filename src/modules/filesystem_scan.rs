@@ -11,6 +11,7 @@ use sha1::*;
 use memmap::MmapOptions;
 use walkdir::WalkDir;
 use yara::*;
+use std::fs::metadata;
 
 use crate::{ScanConfig, GenMatch, HashIOC, HashType, ExtVars, YaraMatch, FilenameIOC};
 
@@ -29,10 +30,27 @@ const FILE_TYPES: &'static [&'static str] = &[
     "Windows Shortcut",
     "ZIP",
 ];  // see https://docs.rs/file-format/latest/file_format/index.html
+
+// this is for MacOS
+// const ALL_DRIVE_EXCLUDES: &'static [&'static str] = &[
+//     "/Library/CloudStorage/",
+//     "/Volumes/"
+// ];
+
+// Customise to exclude unstable linux directories 
 const ALL_DRIVE_EXCLUDES: &'static [&'static str] = &[
-    "/Library/CloudStorage/",
-    "/Volumes/"
+    "/proc",
+    "/sys",
+    "/dev",
+    "/run",
+    "/tmp",
+    "/var/lib/docker",
+    "/var/run",
+    "/mnt",
+    "/media",
+    "/snap"
 ];
+
 
 #[derive(Debug)]
 struct SampleInfo {
@@ -62,7 +80,15 @@ pub fn scan_path (
                 log::debug!("Cannot access file system object ERROR: {:?}", err);
                 continue;
             },
-            Some(Ok(entry)) => entry,
+            // Some(Ok(entry)) => entry,
+            Some(Ok(entry)) => {
+                let entry_path = entry.path().to_string_lossy();
+                if ALL_DRIVE_EXCLUDES.iter().any(|ex| entry_path.starts_with(ex)) {
+                    log::debug!("Skipping excluded path: {}", entry_path);
+                    continue;
+                }
+                entry
+            },
         };
         
         // Skip certain elements
@@ -72,11 +98,11 @@ pub fn scan_path (
             continue;
         };
         // Skip certain drives and folders
-        for skip_dir_value in ALL_DRIVE_EXCLUDES.iter() {
-            if entry.path().to_str().unwrap().contains(skip_dir_value) {
-                it.skip_current_dir()
-            }
-        };
+        // for skip_dir_value in ALL_DRIVE_EXCLUDES.iter() {
+        //     if entry.path().to_str().unwrap().contains(skip_dir_value) {
+        //         it.skip_current_dir()
+        //     }
+        // };
         // Skip big files
         let metadata_result = entry.path().symlink_metadata();
         let metadata = match metadata_result {
@@ -149,7 +175,22 @@ pub fn scan_path (
                 continue; // skip the rest of the analysis 
             }
         };
-        let mmap = unsafe { MmapOptions::new().map(&file_handle).unwrap() };
+
+        let file_len = file_handle.metadata().unwrap().len();
+        if file_len == 0 {
+            log::trace!("Skipping file with 0-byte length: {}", entry.path().display());
+            continue;
+        }
+        let mmap = unsafe {
+            match MmapOptions::new().map(&file_handle) {
+                Ok(m) => m,
+                Err(e) => {
+                    log::debug!("Skipping file due to mmap failure: {} ERROR: {}", entry.path().display(), e);
+                    continue;
+                }
+            }
+        };
+
 
         // ------------------------------------------------------------
         // IOC Matching
