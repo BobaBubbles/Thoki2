@@ -36,12 +36,14 @@ pub fn evaluate_env() {
     }
 }
 
+// Retrieve and return the hostname of the system
 pub fn get_hostname() -> String {
     let mut sys = System::new_all();
     sys.refresh_all();
     sys.host_name().unwrap()
 }
 
+// Return the compile-time OS string
 pub fn get_os_type() -> String {
     env::consts::OS.to_string()
 }
