@@ -65,4 +65,4 @@ Options:
 
 THOKI
 
-![Screenhot of Thoki]([screens/Screenshot 2025-07-31 021701.png](https://github.com/BobaBubbles/Thoki2/blob/master/screens/Screenshot%202025-07-31%20021701.png))
+![Screenhot of Thoki](https://github.com/BobaBubbles/Thoki2/blob/master/screens/thoki-linux.png)
