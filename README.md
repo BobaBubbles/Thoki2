@@ -63,6 +63,6 @@ Options:
 
 # Screenshots
 
-THOKI 2 alpha version
+THOKI)
 
-![Screenhot of Alpha Version](/screens/screen-alpha.png)
+![Screenhot of Thoki](screens/Screenshot 2025-07-31 021701.png)
