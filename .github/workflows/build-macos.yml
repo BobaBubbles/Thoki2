@@ -1,4 +1,4 @@
-name: LOKI2 Build macOS
+name: THOKI2 Build macOS
 
 on:
   push:
