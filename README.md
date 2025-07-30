@@ -1,5 +1,4 @@
-# LOKI2
-LOKI - Simple IOC and YARA Scanner
+# Thoki (Linux Variant) - Simple IOC and YARA Scanner
 
 ## Status
 
