@@ -27,53 +27,42 @@
 
 # Setup Build Environment
 
-## Requirements
-
-See the files in the folder .github/workflows for steps to setup a build environment for 
-
-- Linux
-- macOS
-
-## Providing Signatures 
-
-```bash
-git clone https://github.com/Neo23x0/signature-base ../signature-base/
-ln -s ../signature-base/ ./signatures
-```
-
 ## Build
 
 ```bash
-cargo build
+sudo ./build.sh
 ```
 
 ## Test Run
 
 ```bash
-cargo build && ./target/debug/loki --help
+chmod +x ./thoki
+sudo ./thoki
 ```
 
 ## Usage
 
 ```
-Usage: loki [OPTIONS]
+Usage: thoki [OPTIONS]
 
-LOKI YARA and IOC Scanner
+THOKI YARA and IOC Scanner
 
 Options:
   -m, --max-file-size         Maximum file size to scan (default: 10000000)
   -s, --show-access-errors    Show all file and process access errors
   -c, --scan-all-files        Scan all files regardless of their file type / extension
+  -a, --scan-all-drives       Scan all drives (including mounted drives, usb drives, cloud drives)
   -d, --debug                 Show debugging information
   -t, --trace                 Show very verbose trace output
   -n, --noprocs               Don't scan processes
   -o, --nofs                  Don't scan the file system
   -f, --folder                Folder to scan
+  -p, --cpu-limit             Limit CPU usage percentage (e.g. 20 for 20%)
   -h, --help                  Show this help message.
 ```
 
 # Screenshots
 
-LOKI 2 alpha version
+THOKI 2 alpha version
 
 ![Screenhot of Alpha Version](/screens/screen-alpha.png)
