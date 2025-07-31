@@ -63,8 +63,11 @@ Options:
 # Remarks
 
 Deployment on Fresh Systems:
+
 On the system, place the following in the same directory:
+
 •	The statically built loki ELF binary
+
 •	The "signatures" folder (with the content of the signature-base inside)
 
 # Screenshots
