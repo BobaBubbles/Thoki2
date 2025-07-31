@@ -25,7 +25,7 @@ if ! command -v git &> /dev/null; then
 fi
 
 echo "[INFO] Cloning thoki and signature-base..."
-if [ ! -d "thoki" ]; then
+if [ ! -d "thoki-linux" ]; then
     git clone https://github.com/BobaBubbles/Thoki2.git ./thoki-linux
 fi
 
@@ -33,7 +33,7 @@ if [ ! -d "signature-base" ]; then
     git clone https://github.com/Neo23x0/signature-base ./signature-base
 fi
 
-ln -sf ../signature-base ./thoki/signatures
+ln -sf ../signature-base ./thoki-linux/signatures
 
 # =========================
 # Step 3: Install Build Tools
@@ -87,10 +87,10 @@ cd ..
 # Step 7: Build thoki
 # =========================
 echo "[INFO] Building thoki..."
-cd ./thoki
+cd ./thoki-linux
 export RUSTFLAGS="-L/usr/x86_64-linux-musl/lib -lcrypto -lssl"
 rustup target add x86_64-unknown-linux-musl
 cargo build --target x86_64-unknown-linux-musl --release --verbose
 
 echo "[SUCCESS] Build complete. Binary available at:"
-echo "$HOME/thoki/target/x86_64-unknown-linux-musl/release/thoki"
+echo "$HOME/thoki-linux/target/x86_64-unknown-linux-musl/release/thoki"
