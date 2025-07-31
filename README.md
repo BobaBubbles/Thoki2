@@ -60,9 +60,13 @@ Options:
   -p, --cpu-limit             Limit CPU usage percentage (e.g. 20 for 20%)
   -h, --help                  Show this help message.
 ```
+# Remarks
+
+Deployment on Fresh Systems:
+On the system, place the following in the same directory:
+•	The statically built loki ELF binary
+•	The "signatures" folder (with the content of the signature-base inside)
 
 # Screenshots
-
-THOKI
 
 ![Screenhot of Thoki](https://github.com/BobaBubbles/Thoki2/blob/master/screens/thoki-linux.png)
