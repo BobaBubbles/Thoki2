@@ -1,5 +1,4 @@
 
-
 ![Logo](screens/thokiicon.jpg)
 
 # Thoki (Linux Variant) - Simple IOC and YARA Scanner
@@ -97,6 +96,11 @@ On the system, place the following in the same directory:
 
 ![Files](https://github.com/BobaBubbles/Thoki2/blob/master/screens/portable.png)
 
+# YARA and OpenSSL Sources
+
+Download YARA sources from [here](https://github.com/VirusTotal/yara/archive/v4.2.3.tar.gz)
+
+Download OpenSSL sources from [here](https://www.openssl.org/source/openssl-1.1.1p.tar.gz)
 
 # License and Credits
 
