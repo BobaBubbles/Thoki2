@@ -1,29 +1,18 @@
+
+
+![Logo](screens/thokiicon.jpg)
+
 # Thoki (Linux Variant) - Simple IOC and YARA Scanner
 
+A lightweight Linux-focused security scanner designed to detect indicators of compromise (IOCs) and malicious artifacts using both YARA rules and basic hash-based detection.
 
-### What's already implemented
+Detection is based on two detection methods:
 
-- System reconnaissance (system and hardware information for the log)
-- CPU Limiting
-- Logging and formatting of the different log outputs
-- File system walk
-- File time evaluation (MAC timestamps)
-- Exclusions based on file characteristics
-- IOC initialization - hash values
-- IOC matching on files (hashes)
-- YARA rule initialization, syntax checks, and error handling
-- YARA scanning of files
-- YARA scanning of process memory 
+    1. Yara Rule Check
+       Yara signature match on file data and process memory
 
-### What's still to do
-
-- IOC initialization - file patterns
-- IOC initialization - C2 patterns (FQDN, IP)
-- IOC matching on files (file patterns)
-- C2 IOC matching (process connections)
-- File system walk exceptions: network drivers, mounted drives etc.
-- Custom exclusions (regex on file path)
-- Release workflows (automatically build and provide as release)
+    2. Hash Check
+       Compares known malicious hashes (MD5, SHA1, SHA256) with scanned files
 
 # Setup Build Environment
 
@@ -33,7 +22,9 @@
 sudo ./build.sh
 ```
 
-## Test Run
+## To Run Thoki
+
+- In the same directory of Thoki ELF file, create a directory named signatures with the contents of the signature-base.
 
 ```bash
 chmod +x ./thoki
@@ -70,9 +61,42 @@ On the system, place the following in the same directory:
 
 •	The "signatures" folder (with the content of the signature-base inside)
 
+
+
+### What's already implemented
+
+- System reconnaissance (system and hardware information for the log)
+- CPU Limiting
+- Logging and formatting of the different log outputs
+- File system walk
+- File time evaluation (MAC timestamps)
+- Exclusions based on file characteristics
+- IOC initialization - hash values
+- IOC matching on files (hashes)
+- YARA rule initialization, syntax checks, and error handling
+- YARA scanning of files
+- YARA scanning of process memory 
+
+### What's still to do
+
+- IOC initialization - file patterns
+- IOC initialization - C2 patterns (FQDN, IP)
+- IOC matching on files (file patterns)
+- C2 IOC matching (process connections)
+- File system walk exceptions: network drivers, mounted drives etc.
+- Custom exclusions (regex on file path)
+- Release workflows (automatically build and provide as release)
+
 # Screenshots
 
+#### Default run
+
 ![Screenhot of Thoki](https://github.com/BobaBubbles/Thoki2/blob/master/screens/thoki-linux.png)
+
+#### Requirements for portable environment (signatures and thoki)
+
+![Files](https://github.com/BobaBubbles/Thoki2/blob/master/screens/portable.png)
+
 
 # License and Credits
 
